@@ -13,41 +13,11 @@ run_analysis <- function() {
                                 col.names = c("activity", "activity_label"))
   
   #Test data
-  test_activity <- read.table("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/test/y_test.txt", 
-                         header = FALSE,
-                         col.names = "activity")
-  test_activity <- merge(test_activity, activity_labels, by="activity")
-
-  
-  test_table <- read.table("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/test/X_test.txt", 
-                           header = FALSE, 
-                           col.names = colNames)
-
-  test_subject <- read.table("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/test/subject_test.txt", 
-                       header = FALSE,
-                       col.names = "subject")
-  
-  test_data <- cbind(test_subject, activity, test_table)
-  
-  
+  test_data <- loadData("test", activity_labels, colNames)
   
   #Train data
-  train_activity <- read.table("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/train/y_train.txt", 
-                         header = FALSE,
-                         col.names = "activity")
-  train_activity <- merge(train_activity, activity_labels, by="activity")
-  
-  
-  train_table <- read.table("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/train/X_train.txt", 
-                           header = FALSE, 
-                           col.names = colNames)
-  
-  train_subject <- read.table("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/train/subject_train.txt", 
-                             header = FALSE,
-                             col.names = "subject")
-  
-  train_data <- cbind(train_subject, train_activity, train_table)
-  
+  train_data <- loadData("train", activity_labels, colNames)
+
   
   #combine test and train
   all_data <- rbind(test_data, train_data)
@@ -56,6 +26,26 @@ run_analysis <- function() {
 
   all_data <- select(all_data, subject, activity, activity_label, contains("mean"), contains("std"))
   
-  all_data
+  return(all_data)
   
+}
+
+loadData <- function(dataSetName, activity_labels, colNames) {
+  activity <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/y_", dataSetName, ".txt", sep = ""), 
+                              header = FALSE,
+                              col.names = "activity")
+  activity <- merge(activity, activity_labels, by="activity")
+  
+  
+  table <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/X_", dataSetName, ".txt", sep = ""), 
+                           header = FALSE, 
+                           col.names = colNames)
+  
+  subject <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/subject_", dataSetName, ".txt", sep = ""), 
+                             header = FALSE,
+                             col.names = "subject")
+  
+  data <- cbind(subject, activity, table)
+  
+  return(data)
 }
