@@ -4,6 +4,9 @@ run_analysis <- function() {
   colHeaders <- read.table("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/features.txt", 
                            header = FALSE)
   colNames <- colHeaders[, 2]
+  
+  #Remove invalid characters from column names
+  colNames <- sapply(colNames, function(x) gsub("[-(),]", "", x))
 
   
   test_table <- read.table("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/test/X_test.txt", 
