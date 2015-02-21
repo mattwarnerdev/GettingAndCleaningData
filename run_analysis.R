@@ -1,5 +1,6 @@
 run_analysis <- function() {
   library(dplyr)
+  library(reshape2)
   
   #Q4 (Part 1): Appropriately labels the data set with descriptive variable names. 
   #Get and clean the column headers for the phone metrics. 561 rows to be converted to columns.
@@ -34,26 +35,36 @@ run_analysis <- function() {
   message("Printing the data table for Q4: All test and train phone data with labels, descriptive columns, and subject")
   all_data
   
-  ##Step 5: group by subject and activity, average for each variable .
+  ##Step 5: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+  #group by subject and activity, average for each variable .
+  # mean of tBodyAccmeanX should be 0.2743, tBodyAccmeany should be -0.01774
+  # Wait: by activity!
+  
+  by_subject_activity <- group_by(all_data, subject, activity_label)
+  agg <- summarize(by_subject_activity, count = n(), a = mean(tBodyAccmeanX), b = mean(tBodyAccmeanY))
+  arrange(agg, subject, activity_label)
   
 }
 
 loadData <- function(dataSetName, activity_labels, colNames) {
-  #Load the source data
+  #Load the source data, activity
   activity <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/y_", dataSetName, ".txt", sep = ""), header = FALSE, col.names = "activity")
   
-  #Q3: Uses descriptive activity names to name the activities in the data set
-  #Joins the activity code with its associated description
-  activity <- merge(activity, activity_labels, by="activity")
-  
-  
-  #Q4 (Part 2): Appropriately labels the data set with descriptive variable names. 
-  table <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/X_", dataSetName, ".txt", sep = ""), header = FALSE, col.names = colNames)
+  #Q4 (Part 2): Load source data (phone metrics). Appropriately labels the data set with descriptive variable names. 
+  phone_data <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/X_", dataSetName, ".txt", sep = ""), header = FALSE, col.names = colNames)
   
   #Q5 (Part 1): From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
   #Join the subject data to the phone data to use in the per subject summary
   subject <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/subject_", dataSetName, ".txt", sep = ""), header = FALSE, col.names = "subject")
-  data <- cbind(subject, activity, table)
+  data <- cbind(subject, activity, phone_data)
+  
+  #Q3: Uses descriptive activity names to name the activities in the data set
+  #Joins the activity code with its associated description
+  #Merge needs to come after the cbind, because applying it before the cbind was changing the order of the matched fields
+  #(walking was all moving to the top of the table instead of staying interspersed), which caused subject 1, for example,
+  #to only be matched with walking.  Placing it after preserves the matching of each subject to each measured activity
+  data <- merge(data, activity_labels, by="activity")
+  
   
   return(data)
 }
