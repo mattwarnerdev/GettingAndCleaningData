@@ -1,50 +1,58 @@
 run_analysis <- function() {
   library(dplyr)
   
-  colHeaders <- read.table("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/features.txt", 
-                           header = FALSE)
-  colNames <- colHeaders[, 2]
-  
+  #Q4 (Part 1): Appropriately labels the data set with descriptive variable names. 
+  #Get and clean the column headers for the phone metrics. 561 rows to be converted to columns.
+  colHeaders <- read.table("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/features.txt", header = FALSE)
+  colNames <- colHeaders[, 2]  
+
   #Remove invalid characters from column names
   colNames <- sapply(colNames, function(x) gsub("[-(),]", "", x))
   
+  #Load the codes/descriptions for the 6 activities (Walking etc.)
   activity_labels <- read.table("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/activity_labels.txt", 
                                 header = FALSE, 
                                 col.names = c("activity", "activity_label"))
   
-  #Test data
+  #Load test data, apply descriptive column names and activity descriptions
   test_data <- loadData("test", activity_labels, colNames)
   
-  #Train data
+  #Load train data, apply descriptive column names and activity descriptions
   train_data <- loadData("train", activity_labels, colNames)
 
   
+  #Q1.  Merges the training and the test sets to create one data set.
   #combine test and train
   all_data <- rbind(test_data, train_data)
-    
+  
+  #Q2. Extracts only the measurements on the mean and standard deviation for each measurement. 
+  #Use dplyr to limit the result to columns to mean and standard deviation
   all_data <- tbl_df(all_data)
-
   all_data <- select(all_data, subject, activity, activity_label, contains("mean"), contains("std"))
   
-  return(all_data)
+  #Q4: Final step: Print the data to the console
+  message("Printing the data table for Q4: All test and train phone data with labels, descriptive columns, and subject")
+  all_data
+  
+  ##Step 5: group by subject and activity, average for each variable .
   
 }
 
 loadData <- function(dataSetName, activity_labels, colNames) {
-  activity <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/y_", dataSetName, ".txt", sep = ""), 
-                              header = FALSE,
-                              col.names = "activity")
+  #Load the source data
+  activity <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/y_", dataSetName, ".txt", sep = ""), header = FALSE, col.names = "activity")
+  
+  #Q3: Uses descriptive activity names to name the activities in the data set
+  #Joins the activity code with its associated description
   activity <- merge(activity, activity_labels, by="activity")
   
   
-  table <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/X_", dataSetName, ".txt", sep = ""), 
-                           header = FALSE, 
-                           col.names = colNames)
+  #Q4 (Part 2): Appropriately labels the data set with descriptive variable names. 
+  table <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/X_", dataSetName, ".txt", sep = ""), header = FALSE, col.names = colNames)
   
-  subject <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/subject_", dataSetName, ".txt", sep = ""), 
-                             header = FALSE,
-                             col.names = "subject")
-  
+  #Q5 (Part 1): From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+  #Join the subject data to the phone data to use in the per subject summary
+  subject <- read.table(paste("data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/", dataSetName, "/subject_", dataSetName, ".txt", sep = ""), header = FALSE, col.names = "subject")
   data <- cbind(subject, activity, table)
   
   return(data)
