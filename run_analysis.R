@@ -33,16 +33,20 @@ run_analysis <- function() {
   
   #Q4: Final step: Print the data to the console
   message("Printing the data table for Q4: All test and train phone data with labels, descriptive columns, and subject")
-  all_data
+  print(all_data)
   
   ##Step 5: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
   #group by subject and activity, average for each variable .
   # mean of tBodyAccmeanX should be 0.2743, tBodyAccmeany should be -0.01774
   # Wait: by activity!
   
-  by_subject_activity <- group_by(all_data, subject, activity_label)
-  agg <- summarize(by_subject_activity, count = n(), a = mean(tBodyAccmeanX), b = mean(tBodyAccmeanY))
-  arrange(agg, subject, activity_label)
+  #activity_label and activity are redundant, but group by both to ensure activity isn't averaged later
+  # %>% is like a pipe, reads left to right, input of left passed to right.  Avoids saving/nesting dplyr calls.
+  message("Printing the data table for Q5: All test and train phone data with labels, descriptive columns, and subject")
+  phone_summary <- all_data %>% group_by(subject, activity, activity_label) %>% summarise_each(funs(mean)) %>% arrange(subject, activity, activity_label)
+  write.table(phone_summary, file = "data/step5out.txt", row.names = FALSE)
+  print(phone_summary)
+  
   
 }
 
