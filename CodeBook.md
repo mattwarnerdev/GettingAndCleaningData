@@ -14,6 +14,7 @@ data/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/
 
 The goal of the analysis was to combine the data into a tidy dataset.
 
+The **UNITS** for the columns are provided in the Variables section below.
 
 
 | Name | Description | How it's used in the analysis  |
@@ -41,11 +42,14 @@ Dependencies: Requires dplyr package to be installed.
 ####Combining test and train data (Requirement 4)
 Two functions, run_analysis and loadData work together to load and prepare the data.  loadData enables the same code to be used for both the train and test data, whose structure is identical.
 
-run_analysis loads the column headers from features.txt and removes characters that are invalid for data frame column names like "-(),.", and it loads activity_labels to map the activity codes to their descriptions.
+#####run_analysis()
+run_analysis loads the column headers from features.txt and removes characters that are invalid for data frame column names like "-(),.", and it loads activity_labels to map the activity codes to their descriptions. **(Requirement 2)**
 
-It passes the activity labels and column names to the loadData function with an argument to identify test or train folders, then combines all the data from test and train into one data table.
+It passes the activity labels and column names to the loadData function with an argument to identify test or train folders, then combines all the data from test and train into one data table.  **(Requirement 1 and Requirement 4)**
 
-Finally, only the columns which contain mean and std, meaning standard deviation, are included in the result, per the requirements of the assignment.
+Finally, only the columns which contain mean and std, meaning standard deviation, are included in the result, per the requirements of the assignment. **(Requirement 2)**
+#####loadData(dataSetName, activity_labels, colNames)
+This function loads the activities and subjects for each row in the phone dataset, then binds the columns to the phone dataset **(Requirement 3)**, because there's a one-to-one relationship between them.  After the columns are added, the script adds an activity description column to map from the meaningless activity code to its human-readable description.
 
 ####Summarizing the test and train data (Requirement 5)
 
@@ -57,12 +61,14 @@ The output from this part of the function is one row per subject and activity.  
 ####Feature Selection 
 
 
+#### UNITS: 
 The features selected for this database come from the accelerometer and gyroscope 3-axial raw signals tAcc-XYZ and tGyro-XYZ. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (tBodyAcc-XYZ and tGravityAcc-XYZ) using another low pass Butterworth filter with a corner frequency of 0.3 Hz. 
 
 Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (tBodyAccJerk-XYZ and tBodyGyroJerk-XYZ). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (tBodyAccMag, tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag). 
 
 Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAcc-XYZ, fBodyAccJerk-XYZ, fBodyGyro-XYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals). 
 
+#### Columns: 
 These signals were used to estimate variables of the feature vector for each pattern:  
 '-XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
 
@@ -98,4 +104,95 @@ Additional vectors obtained by averaging the signals in a signal window sample. 
   * tBodyGyroMean
   * tBodyGyroJerkMean
 
+The full list of columns in the tidy dataset are:
+
+  * subject
+  * activity
+  * activity_label
+  * tBodyAccmeanX
+  * tBodyAccmeanY
+  * tBodyAccmeanZ
+  * tGravityAccmeanX
+  * tGravityAccmeanY
+  * tGravityAccmeanZ
+  * tBodyAccJerkmeanX
+  * tBodyAccJerkmeanY
+  * tBodyAccJerkmeanZ
+  * tBodyGyromeanX
+  * tBodyGyromeanY
+  * tBodyGyromeanZ
+  * tBodyGyroJerkmeanX
+  * tBodyGyroJerkmeanY
+  * tBodyGyroJerkmeanZ
+  * tBodyAccMagmean
+  * tGravityAccMagmean
+  * tBodyAccJerkMagmean
+  * tBodyGyroMagmean
+  * tBodyGyroJerkMagmean
+  * fBodyAccmeanX
+  * fBodyAccmeanY
+  * fBodyAccmeanZ
+  * fBodyAccmeanFreqX
+  * fBodyAccmeanFreqY
+  * fBodyAccmeanFreqZ
+  * fBodyAccJerkmeanX
+  * fBodyAccJerkmeanY
+  * fBodyAccJerkmeanZ
+  * fBodyAccJerkmeanFreqX
+  * fBodyAccJerkmeanFreqY
+  * fBodyAccJerkmeanFreqZ
+  * fBodyGyromeanX
+  * fBodyGyromeanY
+  * fBodyGyromeanZ
+  * fBodyGyromeanFreqX
+  * fBodyGyromeanFreqY
+  * fBodyGyromeanFreqZ
+  * fBodyAccMagmean
+  * fBodyAccMagmeanFreq
+  * fBodyBodyAccJerkMagmean
+  * fBodyBodyAccJerkMagmeanFreq
+  * fBodyBodyGyroMagmean
+  * fBodyBodyGyroMagmeanFreq
+  * fBodyBodyGyroJerkMagmean
+  * fBodyBodyGyroJerkMagmeanFreq
+  * angletBodyAccMeangravity
+  * angletBodyAccJerkMeangravityMean
+  * angletBodyGyroMeangravityMean
+  * angletBodyGyroJerkMeangravityMean
+  * angleXgravityMean
+  * angleYgravityMean
+  * angleZgravityMean
+  * tBodyAccstdX
+  * tBodyAccstdY
+  * tBodyAccstdZ
+  * tGravityAccstdX
+  * tGravityAccstdY
+  * tGravityAccstdZ
+  * tBodyAccJerkstdX
+  * tBodyAccJerkstdY
+  * tBodyAccJerkstdZ
+  * tBodyGyrostdX
+  * tBodyGyrostdY
+  * tBodyGyrostdZ
+  * tBodyGyroJerkstdX
+  * tBodyGyroJerkstdY
+  * tBodyGyroJerkstdZ
+  * tBodyAccMagstd
+  * tGravityAccMagstd
+  * tBodyAccJerkMagstd
+  * tBodyGyroMagstd
+  * tBodyGyroJerkMagstd
+  * fBodyAccstdX
+  * fBodyAccstdY
+  * fBodyAccstdZ
+  * fBodyAccJerkstdX
+  * fBodyAccJerkstdY
+  * fBodyAccJerkstdZ
+  * fBodyGyrostdX
+  * fBodyGyrostdY
+  * fBodyGyrostdZ
+  * fBodyAccMagstd
+  * fBodyBodyAccJerkMagstd
+  * fBodyBodyGyroMagstd
+  * fBodyBodyGyroJerkMagstd
 
