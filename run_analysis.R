@@ -1,6 +1,5 @@
 run_analysis <- function() {
   library(dplyr)
-  library(reshape2)
   
   #Q4 (Part 1): Appropriately labels the data set with descriptive variable names. 
   #Get and clean the column headers for the phone metrics. 561 rows to be converted to columns.
