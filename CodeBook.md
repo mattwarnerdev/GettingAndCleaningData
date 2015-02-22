@@ -53,9 +53,9 @@ This part of the run_analysis function uses the %>% syntax to chain the script f
 
 The output from this part of the function is one row per subject and activity.  Each column represents the mean of all observations for that subject and activity.
 ###Variables
---This information is copied and edited from the raw data's features_info.txt file.--
-Feature Selection 
-=================
+*This information is copied and edited from the raw data's features_info.txt file.*
+####Feature Selection 
+
 
 The features selected for this database come from the accelerometer and gyroscope 3-axial raw signals tAcc-XYZ and tGyro-XYZ. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (tBodyAcc-XYZ and tGravityAcc-XYZ) using another low pass Butterworth filter with a corner frequency of 0.3 Hz. 
 
