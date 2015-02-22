@@ -8,7 +8,7 @@ This project is an exercise in Tidy Data, taking raw, unformatted data from phon
 [here]:https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip 
 
 ###Tidy Data:
-The resulting data table is tidy because it follows the rules we discussed in class:
+The data tables output by the run_analysis function are tidy because they follow the rules we covered in the class:
   * Raw Data: Here is a link to the [raw data].
     * After downloading and unzipping the raw data, no modifications are required except those performed by the run_analysis and loadData functions, both provided in the run_analysis.R file.
   * Tidy Data:
@@ -20,10 +20,10 @@ The resulting data table is tidy because it follows the rules we discussed in cl
     * The second result is tidy because of the following reasons:
       * Like the first table, it contains only one observation per cell
       * Each row represents a summary for the given activity and subject/individual.
-    * The Code Book:
-	  * This file!
-	* The exact recipe to go from raw data to tidy data:
-	  * The R script names run_analysis.R
+  * The Code Book:
+    * See CodeBook.md
+  * The exact recipe to go from raw data to tidy data is provided:
+    * The R script names run_analysis.R
 
 
 
